@@ -211,7 +211,7 @@ acumulado_comp2 = [1]
 for i in range(1, 251):
     acumulado_comp2.append(acumulado_comp2[-1] * (ativos_comp_dict[ativos_comparacao[1]][i]))
 
-def resultados():
+def main():
     print("")
     print("-"*70)
     print("Ativos com os menores coeficientes de variação entre títulos públicos:")
@@ -237,4 +237,5 @@ def resultados():
     mp.legend()
     mp.show()
         
-resultados()
+if __name__ == '__main__':
+    main()
