@@ -190,6 +190,26 @@ for linha_comp in linhas_comparacao[1:]:
             # Se a rentabilidade estiver em branco, tratar como 0
             ativos_comp_dict[ativo_comp].append(0)
 
+# Inicialize uma lista para armazenar o acumulado da carteira
+acumulado_carteira = [1] 
+
+# Loop para calcular o acumulado da rentabilidade diária da carteira
+for i in range(1, 251):
+    acumulado_carteira.append(acumulado_carteira[-1] * ( rentabilidade_dia_geral[i]))
+
+# Inicialize uma lista para armazenar o acumulado da selic
+acumulado_comp1 = [1] 
+
+# Loop para calcular o acumulado da rentabilidade diária da selic
+for i in range(1, 251):
+    acumulado_comp1.append(acumulado_comp1[-1] * (ativos_comp_dict[ativos_comparacao[0]][i]))
+
+# Inicialize uma lista para armazenar o acumulado da IBOV
+acumulado_comp2 = [1] 
+
+# Loop para calcular o acumulado da rentabilidade diária da IBOV
+for i in range(1, 251):
+    acumulado_comp2.append(acumulado_comp2[-1] * (ativos_comp_dict[ativos_comparacao[1]][i]))
 
 def resultados():
     print("")
@@ -211,9 +231,9 @@ def resultados():
     print("-"*70)
     print(f"A carteira terá a rentabilidade anual de: {rentabilidade_geral*100}%")
     print("-"*70)
-    mp.plot(dias_uteis,rentabilidade_dia_geral,label="Carteira")
-    mp.plot(dias_uteis,ativos_comp_dict[ativos_comparacao[0]],label="Selic")
-    mp.plot(dias_uteis,ativos_comp_dict[ativos_comparacao[1]],label="IBOV")
+    mp.plot(dias_uteis,acumulado_carteira,label="Carteira")
+    mp.plot(dias_uteis,acumulado_comp1,label="Selic")
+    mp.plot(dias_uteis,acumulado_comp2,label="IBOV")
     mp.legend()
     mp.show()
         
