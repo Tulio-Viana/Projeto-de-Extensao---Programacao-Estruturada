@@ -52,12 +52,6 @@ for ativo in coef_variacao:
 ativos_selecionados_publicos = sorted(ativos_selecionados_publicos, key=lambda x: x[1])[:2]
 ativos_selecionados_privados = sorted(ativos_selecionados_privados, key=lambda x: x[1])[:2]
 
-#Lista para indices dos privados
-indice_sharpe_privado = []
-
-#Lista para indices dos publicos
-indice_sharpe_publico = []
-
 #Função para calcular variância, média e matriz 
 def obtemvalor(origem, tipocalculo,  linha, coluna):
     match tipocalculo:
@@ -93,6 +87,12 @@ cov_pub = np.cov(matriz1_pub,matriz2_pub)[0][1]
 #Calcular o rf (utilizado no calculo tanto dos privados quanto dos publicos) com base na selic do ano (13.75)
 rf = (((13.75/100)+1)**(1/365))
 
+#Lista para indices dos privados
+indice_sharpe_privado = []
+
+#Lista para indices dos publicos
+indice_sharpe_publico = []
+
 def preenchesharpe(variavelapreencher, m1, m2, var1, var2, covpriv, rf):
     for i in np.arange(0, 1.02, 0.02):
         med_portifolio = (i*m1 + (1-i)*m2)
@@ -106,7 +106,7 @@ def preenchesharpe(variavelapreencher, m1, m2, var1, var2, covpriv, rf):
 preenchesharpe(indice_sharpe_privado, media1_privado, media2_privado, var1_privado, var2_privado, cov_priv, rf)
 
 #Selecionar melhor indice sharpe
-menor_sharpe_privado = max(indice_sharpe_privado)
+melhor_sharpe_privado = max(indice_sharpe_privado)
 
 #Relaciona o menor índice as devidas porcentagens
 for i in np.arange(0,1.02,0.02):
@@ -114,7 +114,7 @@ for i in np.arange(0,1.02,0.02):
     var_portifolio = ((i**2)*var1_privado)+(((1-i)**2)*var2_privado)+2*((i+0.02)*((1-i)-0.02)*cov_priv)
     dp_portifolio = var_portifolio**0.5
     indice_sharpe_portifolio = (med_portifolio-rf)/dp_portifolio    
-    if indice_sharpe_portifolio == menor_sharpe_privado:
+    if indice_sharpe_portifolio == melhor_sharpe_privado:
         porcentagem_carteira_privada = (str(i*100)+"% no "+(ativos_selecionados_privados[0][0])+" e "+str((i-1)*100)+"% no "+(ativos_selecionados_privados[1][0]))
         porcentagem_ativo1_privado = (i)
         porcentagem_ativo2_privado = (1-i)
